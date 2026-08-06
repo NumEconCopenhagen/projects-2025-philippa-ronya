@@ -1,9 +1,8 @@
-# [Group name]
+# [Philippa_&_Ronya]
 
 **Group members:**
-- A
-- B
-- C
+- Philippa
+- Ronya
 
 **This repository contains:***
 
