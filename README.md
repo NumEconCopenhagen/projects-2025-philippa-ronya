@@ -3,6 +3,7 @@
 **Group members:**
 - Philippa
 - Ronya
+- Eduardo
 
 **This repository contains:***
 
