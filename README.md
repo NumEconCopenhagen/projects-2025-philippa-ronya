@@ -13,6 +13,7 @@
 
 *All code can be run with a standard Anaconda Distribution for Python 3.13.*
 
+<<<<<<< HEAD
 Data Project 
 
 Inequality in Denmark 
@@ -39,3 +40,5 @@ IFOR41 = DstApi('IFOR41')
 IFOR41.tablesummary(language='en')
 
 
+=======
+>>>>>>> 05a1f64c0ca50e9737edd1163c51bf4763f3a180
