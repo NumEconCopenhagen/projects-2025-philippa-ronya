@@ -17,6 +17,9 @@ Data Project
 
 Inequality in Denmark 
 
+import and set magics: 
+
+
+
 Question 1.1 
 
-hej
