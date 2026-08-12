@@ -1,3 +1,6 @@
+# importing necessary packages 
+import pandas as pd
+from dstapi import DstApi
 
 # Importing table IFOR41 from Danmarks Statistik
 IFOR41 = DstApi('IFOR41')
