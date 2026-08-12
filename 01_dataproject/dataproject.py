@@ -1,4 +1,6 @@
 import numpy as np
+import pandas as pd
+
 
 def load_data():
     """
@@ -28,3 +30,14 @@ def process_data(data):
         data[f'log_{k}'] = np.log(v)
 
     return data
+
+
+
+# APIs
+from fredapi import Fred
+from dstapi import DstApi
+
+# plotting
+import matplotlib.pyplot as plt
+colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
+
