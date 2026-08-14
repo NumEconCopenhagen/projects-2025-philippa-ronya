@@ -56,3 +56,26 @@ TOP10_municipalities = TOP10_municipalities.rename(
     columns={'INDHOLD': 'TOP10'}
 )
 
+# Select municipality, year, and Gini coefficient
+gini_municipalities = gini_municipalities[
+    ['KOMMUNEDK', 'TID', 'INDHOLD']
+]
+
+# Rename INDHOLD to GINI
+gini_municipalities = gini_municipalities.rename(
+    columns={'INDHOLD': 'GINI'}
+)
+# Mearging Gini and Top10 for municipalities
+merged_municipalities = pd.merge(
+    gini_municipalities,
+    TOP10_municipalities,
+    on =['KOMMUNEDK','TID'],
+    how='inner',
+    validate='1:1') 
+
+# Selecting columns
+merged_municipalities = merged_municipalities[
+    ['KOMMUNEDK', 'TID', 'GINI', 'TOP10']]
+
+
+
