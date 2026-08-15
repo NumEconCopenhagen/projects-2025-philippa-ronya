@@ -3,7 +3,6 @@ from dstapi import DstApi
 
 # Importing table IFOR41 from Danmarks Statistik
 IFOR41 = DstApi('IFOR41')
-IFOR41.tablesummary(language='en')
 
 # Retrive Gini for all municipilites and years of table IFOR41
 params1 = {
@@ -22,7 +21,6 @@ gini_municipalities = IFOR41.get_data(params=params1)
 
 # Importing table IFOR32 from Danmarks Statistik
 IFOR32 = DstApi('IFOR32')
-IFOR32.tablesummary(language='en')
 
 # Retrive Gini for all municipilites and years of table IFOR32
 params1 = {

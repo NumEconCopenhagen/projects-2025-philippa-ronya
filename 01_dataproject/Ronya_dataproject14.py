@@ -3,7 +3,6 @@ from dstapi import DstApi
 
 # Importing relevant information about gini from table IFOR41 from Danmarks Statistik
 IFOR41 = DstApi('IFOR41')
-IFOR41.tablesummary(language='en')
 
 params1 = {
     'table': 'IFOR41',
@@ -25,7 +24,6 @@ gini_municipalities = gini_municipalities[
 gini_municipalities = gini_municipalities.rename(
     columns={'INDHOLD': 'GINI'}
 )
-
 
 # Import average disposable income for municipalities from table INDK101 from Danmarks Statistik
 INDKF101 = DstApi('INDKF101')

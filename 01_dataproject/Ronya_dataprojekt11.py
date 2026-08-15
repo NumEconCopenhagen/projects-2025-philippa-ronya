@@ -4,7 +4,6 @@ from dstapi import DstApi
 
 # Importing table IFOR41 from Danmarks Statistik
 IFOR41 = DstApi('IFOR41')
-IFOR41.tablesummary(language='en')
 
 # Getting variable levels for 'ULLIG'
 IFOR41.variable_levels('ULLIG',language='en') 
