@@ -4,7 +4,7 @@ import numpy as np
 
 # population
 N = 50_000
-ages = np.arange(18, 66)
+ages = np.arange(18, 65)
 
 # b. build random generator for educations with propabilities p
 
@@ -104,8 +104,11 @@ for t in range(1, len(ages)):
 
     is_studying = age < entry_age
     just_entered = age == entry_age
-    is_employed = (age > entry_age) & employed[:, t]
-    is_unemployed = (age > entry_age) & ~employed[:, t]
+    was_employed = employed[:, t-1]
+    was_unemployed = ~was_employed
+
+    is_employed = (age > entry_age) & was_employed
+    is_unemployed = (age > entry_age) & was_unemployed
 
     # unchanged while studying
     human_capital[is_studying, t] = initial_h[is_studying]
