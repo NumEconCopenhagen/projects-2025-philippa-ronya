@@ -1,44 +1,31 @@
 # [Philippa_&_Ronya]
 
 **Group members:**
-- Philippa
-- Ronya
-- Eduardo
+- Philippa Jensen
+- Ronya Ekici
+- Eduardo Alfaro
 
 **This repository contains:***
 
 1. Data project
-1. Model project
-1. Exam project
+2. Model project
+3. Exam project
 
-*All code can be run with a standard Anaconda Distribution for Python 3.13.*
+*All code can be run with a standard Anaconda Distribution for Python 3.14.6*
 
-<<<<<<< HEAD
-Data Project 
+Data project
+- Ronya made question 1.1 to 1.4
+- Philippa made question 2.1 and 2.2
+- Eduardo made question 2.3 to 2.5 
 
-Inequality in Denmark 
+Model project 
+- Ronya made section 1 and 3 
+- Philippa made section 2
+- Eduardo made section 4 and 5
 
-import and set magics: 
+Exam project
+- Ronya made section 3 (Portfolio model)
+- Philippa made section 1 (US GDP data)
+- Eduardo made section 2 (Solow model)
 
-import numpy as np
-import pandas as pd
-
-# APIs
-from fredapi import Fred
-from dstapi import DstApi
-
-# plotting
-import matplotlib.pyplot as plt
-colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
-
-
-Question 1.1 
-
-We load the data from Statistikbanken.dk 
-IFOR41 = DstApi('IFOR41')
-
-IFOR41.tablesummary(language='en')
-
-
-=======
->>>>>>> 05a1f64c0ca50e9737edd1163c51bf4763f3a180
+Note: The .py file/files belonging to a given section were written or completed by the group member responsible for that section. 
