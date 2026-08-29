@@ -51,7 +51,6 @@ class PortfolioModelClass:
         text += f'  theta_star = {par.theta_star:.4f}, Delta = {par.Delta:.4f}, tau = {par.tau:.4f}\n'
         text += f'  gamma = {par.gamma:.4f} (relative risk aversion)\n'
         text += f'  W0 = {par.W0:.2f}, T = {par.T}, N = {par.N:,}, seed = {par.seed}'
-
         return text
 
     def draw_returns(self):
@@ -79,12 +78,122 @@ class PortfolioModelClass:
 
     # the share of wealth in the risky asset after trading, and the amount traded
     def trade(self,theta):
-        raise NotImplementedError
+        """ apply the no-trade-band rule
+
+        Args:
+
+            theta (ndarray): share of wealth in the risky asset before trading
+
+        Returns:
+
+            theta_post (ndarray): share of wealth in the risky asset after trading
+            traded (ndarray): boolean, True where the portfolio is traded
+
+        """
+
+        par = self.par
+
+        # a. is the portfolio outside the no-trade band?
+        traded = np.abs(theta-par.theta_star) > par.Delta
+
+        # b. if traded, go all the way back to the target, otherwise stay put
+        theta_post = np.where(traded,par.theta_star,theta)
+
+        return theta_post,traded
 
     # simulate all N portfolios forward T periods
     def simulate(self,R=None):
-        raise NotImplementedError
+        """ simulate all N portfolios forward T periods
+
+        Args:
+
+            R (ndarray,optional): gross returns on the risky asset with shape (N,T).
+                If None, they are drawn using draw_returns().
+
+        Stores in self.sim:
+
+            W (ndarray): wealth, shape (N,T+1)
+            theta (ndarray): share in the risky asset before trading, shape (N,T+1)
+            traded (ndarray): boolean, True where the portfolio is traded, shape (N,T)
+
+        """
+
+        par = self.par
+        sim = self.sim
+
+        # a. draw returns if not given
+        if R is None:
+            R = self.draw_returns()
+
+        Rf = np.exp(par.r)
+
+        # b. allocate containers
+        W = np.empty((par.N,par.T+1))
+        theta = np.empty((par.N,par.T+1))
+        traded = np.empty((par.N,par.T),dtype=bool)
+
+        # c. initial values: everyone starts exactly at the target
+        W[:,0] = par.W0
+        theta[:,0] = par.theta_star
+
+        # d. loop over time, vectorized over portfolios
+        for t in range(par.T):
+
+            # i. trade towards the target if outside the band
+            theta_post,traded_t = self.trade(theta[:,t])
+            traded[:,t] = traded_t
+
+            # ii. pay the transaction cost on the amount traded
+            amount_traded = np.abs(theta_post-theta[:,t])
+            W_post = W[:,t]*(1-par.tau*amount_traded)
+
+            # iii. realize returns
+            W[:,t+1] = theta_post*W_post*R[:,t] + (1-theta_post)*W_post*Rf
+
+            # iv. share in the risky asset going into next period
+            theta[:,t+1] = theta_post*W_post*R[:,t]/W[:,t+1]
+
+        # e. store results
+        sim.R = R
+        sim.W = W
+        sim.theta = theta
+        sim.traded = traded
 
     # the numbers to report for a rule, including expected utility
     def summary(self):
-        raise NotImplementedError
+        """ compute the six summary numbers for the current simulation
+
+        Returns:
+
+            out (SimpleNamespace) with fields:
+
+                n_trades (float): average number of times a portfolio is traded
+                avg_dist (float): average |theta_t - theta_star| before trading
+                mean_WT (float): mean of terminal wealth
+                median_WT (float): median of terminal wealth
+                p10_WT (float): 10th percentile of terminal wealth
+                EU (float): expected utility, mean of u(WT)
+
+        """
+
+        par = self.par
+        sim = self.sim
+
+        out = SimpleNamespace()
+
+        # a. average number of trades per portfolio
+        out.n_trades = np.mean(np.sum(sim.traded,axis=1))
+
+        # b. average distance to target, before trading, over all periods t=0,...,T-1
+        out.avg_dist = np.mean(np.abs(sim.theta[:,:-1]-par.theta_star))
+
+        # c. terminal wealth statistics
+        WT = sim.W[:,-1]
+        out.mean_WT = np.mean(WT)
+        out.median_WT = np.median(WT)
+        out.p10_WT = np.percentile(WT,10)
+
+        # d. expected utility
+        out.EU = np.mean(self.u(WT))
+
+        return out
